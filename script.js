@@ -1,19 +1,40 @@
-//window.onload = main;
+window.onload = main;
 
 function main(){
-    document.getElementById('iframe').src = "";
-    dict = GetVideos();
-    dict = getCringeVideo(dict);
-    console.log(dict);
+    setElements("sus", "", "", "")
+    var videos = getVideos();
+    var id = getCringeVideo(setKentusValue(videos));
+    var object = getParentObject(videos, id)
+    setElements("https://www.youtube-nocookie.com/embed/" + id + "?fs=1&modestbranding=1&rel=0&autoplay=1", object.viewCount, getSubs(object.authorId), new Date(object.published * 1000).toLocaleString("en-GB", {timeZone: "UTC"}))
+}
 
-    document.getElementById('iframe').src = "https://www.youtube-nocookie.com/embed/" + dict + "?fs=0&modestbranding=1&rel=0";
+function setElements(src, views, subs, date){
+    document.getElementById('iframe').src = src;
+    document.getElementById('views').textContent = subs;
+    document.getElementById('subs').textContent = views;
+    document.getElementById('date').textContent = date;  
+}
+
+function getSubs(id){
+    var json = getJson("https://invidio.xamh.de/api/v1/channels/" + id + "?fields=subCount&pretty=1");
+    return json["subCount"];
+}
+
+function getParentObject(videos, id){
+    var obj;
+    videos.forEach(element => {
+        if(element.videoId === id){
+            obj = element;
+        }
+    });
+    return obj;
 }
 
 function getJson(url){
-    var httpreq = new XMLHttpRequest(); // a new request
+    var httpreq = new XMLHttpRequest();
     httpreq.open("GET", url, false);
     httpreq.send(null);
-    return httpreq.responseText;          
+    return JSON.parse(httpreq.responseText);          
 }
 
 function random(min, max) {
@@ -21,8 +42,8 @@ function random(min, max) {
 }
 
 function getLetter(){
-    var letters = "abcdefghijklmnopqrstuvwxyz"
-    return letters[random(0, letters.length)]
+    var letters = "abcdefhijklmnoprstuvxyz" //gqw
+    return letters[random(0, letters.length - 1)]
 }
 
 function getCringeVideo(object){
@@ -33,27 +54,30 @@ function getCringeVideo(object){
 
     for (i = 0; i < length; i++)
     {
-        //sortedDict.push({"key": Object.keys(object).find(key => object[key] === val[i]), "value":val[i]});
         sortedDict[Object.keys(object).find(key => object[key] === val[i])] = val[i]
     }
-
-    console.log(sortedDict);
     return Object.keys(object).find(key => object[key] === val[0]);
 }
 
-function GetVideos(){
-    var dict = {};
-    var json = JSON.parse(getJson("https://invidio.xamh.de/api/v1/search/?fields=videoId,viewCount,published,authorId&q=" + getLetter() + getLetter() + "&page=20&sort_by=view_count&date=today&duration=short&type=video&pretty=1"));
+function getVideos(){   
+    var json = getJson("https://invidio.xamh.de/api/v1/search/?fields=videoId,viewCount,published,authorId&q=" + getLetter() + getLetter() + "&page=20&sort_by=view_count&date=today&duration=short&type=video&pretty=1"); 
     
     //pokud je json prázdný
     while(Object.keys(json).length === 0){
-        json = JSON.parse(getJson("https://invidio.xamh.de/api/v1/search/?fields=videoId,viewCount,published,authorId&q=" + getLetter() + getLetter() + "&page=20&sort_by=view_count&date=today&duration=short&type=video&pretty=1"));
+        search = getLetter() + getLetter();
+        json = getJson("https://invidio.xamh.de/api/v1/search/?fields=videoId,viewCount,published,authorId&q=" + search + "&page=10&sort_by=view_count&date=today&duration=short&type=video&pretty=1");
+        console.log(search);
     }
     
-    //videoId, viewCount, published
+    return json;
+}
+
+function setKentusValue(json){
+    var dict = {};
     json.forEach(element => {
         dict[element["videoId"]] = element["published"] * (element["viewCount"] + 1) 
     });
     return dict;
 }
+
 
