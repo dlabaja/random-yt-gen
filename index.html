@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en,cz,sk">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RandomYtGenerator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <center>
+    <div id="page">
+        <div id="topnav">
+            <h1>Random&nbspYT&nbspGenerator</h1>
+            <h3>explore&nbspthe&nbspbottom&nbspof&nbspthe&nbspinternet!</h3>
+        </div>
+        <hr> 
+        <div id="container">
+            <div id="stats">
+                Views: <b></b><br>
+                Subscribers: <b></b><br>
+                Published: <b></b><br>
+            </div>
+            <div id="video">
+                <iframe id="iframe" frameborder="1"></iframe>
+            </div>
+            <div id="button">
+                <button id="api" onclick="window.location.reload();">API</button>
+                <button id="next" onclick="main()">Next&nbspVideo</button>              
+            </div>    
+        </div>         
+    </div>    
+</body>
+</html>
