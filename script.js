@@ -1,23 +1,23 @@
-window.onload = main;
-
-function main(){
-    setElements("sus", "", "", "")
-    var videos = getVideos();
-    var id = getCringeVideo(setKentusValue(videos));
-    var object = getParentObject(videos, id)
-    setElements("https://www.youtube-nocookie.com/embed/" + id + "?fs=1&modestbranding=1&rel=0&autoplay=1", object.viewCount, getSubs(object.authorId), new Date(object.published * 1000).toLocaleString("en-GB", {timeZone: "UTC"}))
-}
-
 function setElements(src, views, subs, date){
     document.getElementById('iframe').src = src;
-    document.getElementById('views').textContent = subs;
-    document.getElementById('subs').textContent = views;
+    document.getElementById('views').textContent = views;
+    document.getElementById('subs').textContent = subs;
     document.getElementById('date').textContent = date;  
 }
 
 function getSubs(id){
     var json = getJson("https://invidio.xamh.de/api/v1/channels/" + id + "?fields=subCount&pretty=1");
+    if(json["subCount"] === 0)
+        return "0 / hidden";
     return json["subCount"];
+}
+
+function setLoadingText(text){
+    try{
+        document.getElementById("loading").textContent = text;
+    }catch{
+        return;
+    }
 }
 
 function getParentObject(videos, id){
@@ -63,10 +63,12 @@ function getVideos(){
     var json = getJson("https://invidio.xamh.de/api/v1/search/?fields=videoId,viewCount,published,authorId&q=" + getLetter() + getLetter() + "&page=20&sort_by=view_count&date=today&duration=short&type=video&pretty=1"); 
     
     //pokud je json prázdný
-    while(Object.keys(json).length === 0){
-        search = getLetter() + getLetter();
-        json = getJson("https://invidio.xamh.de/api/v1/search/?fields=videoId,viewCount,published,authorId&q=" + search + "&page=10&sort_by=view_count&date=today&duration=short&type=video&pretty=1");
-        console.log(search);
+    var i = 1;
+    setLoadingText("Generating random video (" + i + ". try)")
+    while(Object.keys(json).length === 0){ 
+        json = getJson("https://invidio.xamh.de/api/v1/search/?fields=videoId,viewCount,published,authorId&q=" + getLetter() + getLetter() + "&page=10&sort_by=view_count&date=today&duration=short&type=video&pretty=1");
+        setLoadingText("Generating random video (" + i + ". try)")
+        i++;
     }
     
     return json;
@@ -79,5 +81,3 @@ function setKentusValue(json){
     });
     return dict;
 }
-
-
