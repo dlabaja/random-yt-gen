@@ -24,18 +24,15 @@
             </div>
             <div id="video">
                 <pre id="loading"></pre>
-                <iframe id="iframe" frameborder="1" allowfullscreen></iframe>
+                <iframe id="iframe" frameborder="1" allowfullscreen allow="autoplay"></iframe>
             </div>
             <div id="button">
-                <a href="/api"><button id="api">API</button></a>
-                <button id="next" onclick="main()">Next&nbspVideo</button>              
+                <a href="/api/index.html"><button id="api">API</button></a>
+                <button id="next" onclick="window.location.reload()">Next&nbspVideo</button>              
             </div>    
         </div>         
     </div>
     <script type="text/javascript">
-        window.onload = main;
-        
-        function main(){
             setElements("", "", "", "");
             var videos = getVideos();
             var id = getCringeVideo(setKentusValue(videos));
@@ -43,7 +40,6 @@
             setLoadingText("Video generated - get ready to cringe!")
             setElements("https://www.youtube-nocookie.com/embed/" + id + "?fs=1&modestbranding=1&rel=0&autoplay=1", object.viewCount, getSubs(object.authorId), new Date(object.published * 1000).toLocaleString("en-GB", {timeZone: "UTC"}))
             setLoadingText("")
-        }
     </script>    
 </body>
 </html>

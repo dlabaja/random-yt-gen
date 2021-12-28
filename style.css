@@ -15,6 +15,7 @@ iframe {
     height: 100%;
     border: solid 5px;
     border-color: #000;
+    background-color: #fff;
     background:url(img/loading.gif) center center no-repeat;
 }
 
@@ -53,7 +54,7 @@ hr{
 
 #page{
     text-align: center;
-    width: 70%;
+    width: 65%;
 }
 
 #topnav{

@@ -11,9 +11,6 @@
 <body>
     <pre id="json"></pre>
     <script>
-        window.onload = main;
-
-        function main(){
             var videos = getVideos();
             var id = getCringeVideo(setKentusValue(videos));
             var object = getParentObject(videos, id)
@@ -26,7 +23,6 @@
             };
             console.log(json);
             document.getElementById("json").textContent = JSON.stringify(json, null, 2);
-        }
     </script>
 </body>
 </html>
